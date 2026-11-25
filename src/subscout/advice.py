@@ -27,6 +27,7 @@ MIN_FOR_SHARE = 6
 MAX_PARAGRAPHS = 3
 SAME_SHAPE_RUN = 5  # consecutive steps with one paragraph count and similar length
 SHAPE_TOLERANCE = 0.35  # word count within this share of the run median
+EMOJI = re.compile("[\U0001F300-\U0001FAFF✨⭐⚡✅❌]")  # pictographs and sparkles used as icons
 MAX_SUBSECTIONS = 12  # more than this reads as a list, whatever the headings say
 
 
@@ -139,4 +140,10 @@ def style_advice(body: str) -> list[str]:
         if n > MAX_PARAGRAPHS:
             h = next(iter(headings(m.group(1))), "(untitled step)")
             out.append(f"step '{h}' has {n} paragraphs (more than {MAX_PARAGRAPHS}): split the idea or cut.")
+    # 7. a pictograph or sparkle used as an icon: a generated-template marker (styleguide/rules.md, section 6)
+    found = EMOJI.findall(FENCE.sub("", body))
+    if found:
+        out.append(
+            f"{len(found)} emoji or pictograph(s) in the story ({''.join(sorted(set(found)))}): use marks drawn from the data, or plain text."
+        )
     return out

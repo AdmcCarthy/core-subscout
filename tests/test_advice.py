@@ -85,3 +85,8 @@ def test_advice_is_in_the_report_and_never_an_error(tmp_path):
     rep = build(d, out)
     assert rep.errors == [] and rep.advice
     assert json.loads((out / "build-report.json").read_text(encoding="utf-8"))["advice"] == rep.advice
+
+
+def test_emoji_in_a_story_is_flagged_and_plain_text_is_not():
+    assert any("emoji" in a for a in style_advice("Fewer wells \U0001F680 were drilled.\n"))
+    assert not any("emoji" in a for a in style_advice("Fewer wells were drilled.\n"))

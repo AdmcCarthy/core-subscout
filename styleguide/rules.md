@@ -81,3 +81,19 @@ Before a story is published, answer for each step:
    (see voice.md, Variety).
 
 Plus: does every step have one idea? Does the arc land? Is every Interpreted claim marked?
+
+## 6. Not template-shaped **[Default]**
+
+Readers take a page for generated when several stock patterns turn up together. None is banned outright; each needs a reason on
+the page, and two or more together is a review finding.
+
+- **Layout:** no centred hero over three equal icon cards; no pill badge above the headline; no single accent-coloured word in a headline.
+- **Decoration:** no emoji or sparkle icons; no purple-to-blue gradient; no glass or glow outside Outcrop. A gradient carries data
+  (uncertainty) or is one flat-to-surface wash, never a brand sweep.
+- **Interaction:** hover and focus differ by purpose. A card that only links changes its border colour; a lift and a long shadow are not
+  the default for every card.
+- **Spacing and shape:** one spacing scale and one radius set, read from the tokens; no raw hex or pixel values in page CSS.
+- **Charts:** reset the library default (palette from Tide, legend or direct labels, light gridlines, no default title or font, square bar ends).
+- **Copy:** no unverifiable round claims ("10x", "99%"); the prose patterns are checked by Idiom (`house/ai-tells.md`).
+- **Checked by the build as advice:** an emoji or pictograph in a story. The rest is review.
+

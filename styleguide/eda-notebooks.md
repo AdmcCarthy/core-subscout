@@ -2,7 +2,7 @@
 
 How an exploratory notebook on subsurface data is ordered, what it may claim and how it is worded. It is the third format beside the story and the deck, chosen by purpose in the same
 way: a story is one argument read once, a deck teaches a body of knowledge in parts, and an exploratory notebook shows what one kind of data holds and how far it can be trusted. SubScout
-holds the guide and does not build the notebook. The guide is about structure, statistics and language; colour and type follow the register of the project that applies it. Draft, 2026-11-14. Thresholds marked **[convention]** are common practice, not findings: they bind only when a project adopts them.
+holds the guide and does not build the notebook. The guide is about structure, statistics and language; colour and type follow the register of the project that applies it. Draft, 2026-11-14; section 9 (presentation) added 2026-11-24. Thresholds marked **[convention]** are common practice, not findings: they bind only when a project adopts them.
 
 An exploratory notebook answers one question about one kind of data, shows the reader how far the data can be trusted before any statistic, and ends on what the data cannot say. It does
 not argue a case: for that, write a story (see [story-format.md](story-format.md)).
@@ -119,3 +119,81 @@ Impersonal, British English, sentence-case headings, metric first (see [language
 
 A coefficient is described as association unless a mechanism is shown. A cluster is a grouping, a component is a direction of variance, and neither is a geological unit until the domain
 names it.
+
+## 9. Presentation: the page and the figure **[Default]**
+
+Sections 1 to 8 say what a notebook may claim. This section says how its page and figures look, so that notebooks, stories and decks read as one house and none reads as a template. It applies to the exported page of a notebook and to a story page built beside it; the story and deck formats keep their own files. Each rule is checked by a test, a checker or review, as marked.
+
+### 9.1 Roles, not values
+
+- **Type** is Ledger: Newsreader for the title, standfirst and section headings, Instrument Sans for text, JetBrains Mono for kickers and code. A font that is not installed falls back through the stack; a figure drawn by code takes the first installed font of the same stack, so a missing one never prints a warning per figure.
+- **Colour** comes from SubScout's light-scheme role tokens (`--ss-canvas`, `--ss-text`, `--ss-border-subtle`, `--ss-accent`, `--ss-data-highlight` and the others). A page or figure helper holds the roles once, with the token name beside each value; no raw hex appears elsewhere. *(test: the role table equals the token file; page CSS holds only role values)*
+- **Spacing** is the SubScout scale (4, 8, 16, 24, 32, 48 px) and one measure (about 66 characters) for running text. No other length appears in page CSS. *(test)*
+- **Shape:** square or 4 px corners, one border weight, no shadow, no gradient, no blur, no lift on hover. A control changes border colour on hover. *(test)*
+- **Light scheme only** for notebooks. A page that needs a dark scheme takes SubScout's tokens whole.
+
+### 9.2 Anatomy of a page
+
+The order is the same for every notebook and story, and only the content changes:
+
+1. A thin bar with the way back (index) and the project area, in mono capitals.
+2. A kicker (`NCS · play analysis · story 3`), then the title. A story's title is its finding; a notebook's is its question.
+3. A standfirst in the display face: the headline numbers in a sentence, each computed at build.
+4. A fact strip: confidence level (Observed, Derived or Interpreted), the source with its credit line from `DATASETS.md`, and the colour standard the figure uses. A page never states a licence from memory.
+5. The figure, then the notes in two columns: *how to read* and *sources* on the left, *caveats* on the right behind a single ochre rule. The caveat block has no fill.
+6. A footer with the static versions, the rebuild command and the styling line.
+
+The page `<title>` is the same as the heading, never the default `Notebook`.
+
+### 9.3 Colour that means something
+
+- **Entity colour stays with the entity:** ICS chart colours for ages, plays and anything on a time axis; the Geostandard colours for oil, gas and condensate; a company's brand colour; the fluid-class continuum. They are never recoloured to match the page.
+- **Everything else** is a token. One hue, light to dark, for ordered classes (age steps, depth classes); no more than five identity colours in the fixed order of `--ss-data-cat-1` to `5`, and any further entity takes the context grey and is labelled "Other".
+- **Never red against green**, never colour alone: a class also has a marker shape, a label or a pattern. A comparison of two series uses one accent and one reference grey.
+- **One emphasis at a time.** The highlight colour (ochre) marks the one thing the reader should see: a median, a peak, an annotation. As text it uses its darker step (`--ss-ochre-9`).
+- **A status ramp** is clear of the reserved colours, is checked by simulation for colour-vision differences, and carries a symbol and a count (section 5).
+
+### 9.4 The figure resets its library's defaults
+
+Plotly, matplotlib and D3 each have a look of their own, and a figure that keeps it reads as unedited. Every figure sets the following in one shared helper, never per figure:
+
+| Setting | Rule |
+|---|---|
+| Canvas | the page canvas colour behind the plot, no box, no frame |
+| Font | the body stack; 13 px on the page, no text below 8 pt in a static figure |
+| Grid | `--ss-border-subtle`, one direction unless both are read; no minor grid |
+| Axes | a label with unit and, where there is a depth, its datum (`TVD [m RT]`); the basis tag after the unit comes from the engine helper |
+| Marks | an outline in the text colour at 0.5 to 1 px; no gradient fill, no drop shadow |
+| Legend | direct labels for four series or fewer; otherwise below the plot, never over data |
+| Annotation | one or two, in the highlight colour, with a leader line; never overlapping a mark or a label |
+| Title | none inside the figure when the page carries one; a static figure carries its own title, source and confidence line |
+| Tooltip | at most two lines; the rest in the fixed detail panel |
+| Static twin | a PNG and an SVG of every interactive figure, at 150 dpi, on the canvas colour |
+
+The library defaults to look for: the Plotly blue-orange sequence, the matplotlib tab10 cycle, a legend in the top-right corner, a full box around the axes, a rounded bar end, a default title and the default font.
+
+### 9.5 Not template-shaped
+
+The patterns that make a page read as generated are listed in `rules.md` section 6 (layout, decoration, interaction, spacing, copy). For a notebook they come down to four: no emoji or sparkle as an icon; no row of identical cards with an icon on top; every heading and standfirst differs in construction from its neighbours (the variety rule in `voice.md`); and none of the stock sentence forms in Idiom's `house/ai-tells.md` (a dash as punctuation, a "not just … but …" contrast, a trailing "-ing" tail, "studies show", a stack of three adjectives).
+
+### 9.6 What a build checks
+
+| Check | Where |
+|---|---|
+| Role values equal SubScout's tokens; page CSS holds no raw colour and only scale lengths; no shadow, gradient or lift | a test beside the page builder |
+| Prose in markdown cells and page text: first person, exclamation, banned words, the stock patterns above | Idiom `check_voice.py` and `check_banned.py` |
+| Headings, steps and paragraphs that repeat one shape | SubScout `advice.py`, as advice |
+| Every figure has source, units and confidence; every number in the title and standfirst is computed | the builder, as errors |
+| The rendered page is looked at | a person, in a real browser at 1440 × 900 and 1920 × 1080, no phone check: a phone is checked for SubScout data stories only |
+
+A page is not done until its rendered output has been looked at, whatever the tests say. A chart whose script fails in the browser leaves an empty block that no test of the HTML text sees, so the check loads the page and reads the browser console.
+
+### 9.7 Review questions
+
+1. Does the title say what the page found, or what it asks?
+2. Could a reader name the one emphasised thing in each figure?
+3. Does every colour mean something, or is it the library's?
+4. Is each number in prose computed, and each figure sourced, in units and with a confidence level?
+5. Would the page look the same with its colours and fonts swapped for another project's? If so, nothing of the subject is in it: use a mark drawn from the data (strata, a contour, a trace) in place of decoration.
+6. Does any heading, paragraph opener or caption repeat the one before it?
+7. Is anything there only because a template put it there?
